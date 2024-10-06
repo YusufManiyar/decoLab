@@ -15,9 +15,45 @@
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  background-color: white;
+  color: black;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+  transition: 0.4s;
+  cursor: pointer !important;
+}
+
+.background-image {
+  background-image: url('../public/assets/backgorund.png');
+  background-repeat: no-repeat;
+}
+
+.border-primary {
+  border: 1px solid #5B5B5B;
+}
+
+.border-invalid {
+  border: 1px solid rgb(239 68 68);
+}
+
+.welcome-text {
+  font-family: Poppins;
+  font-size: 52px;
+  font-weight: 500;
+  line-height: 51.9px;
+  letter-spacing: -0.06em;
+  text-align: left;
+  color: #1E1E1E;
+}
+
+.background-vector {
+  position: relative;
+  width: 994px;
+  height: 1124.12px;
+  top: -100px;
+  left: -68px;
 }
 
 @layer utilities {

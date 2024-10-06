@@ -1,8 +1,10 @@
 const express = require('express');
-const {register, login} = require('../controllers/authController');
+const passport = require('passport');
+const {register, emailLogin, updateUser} = require('../controller/authController');
 const router = express.Router();
 
 router.post('/register', register);
-router.post('/login', login);
+router.post('/email-login', emailLogin);
+router.patch('/update', passport.authenticate('jwt', {session: false}), updateUser);
 
 module.exports = router;
