@@ -46,7 +46,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        const userData = await fetchUserData(); // Implement this function to get user data
+        const userData = await fetchUserData();
         setUser(userData);
       } catch (error) {
         console.error('Failed to fetch user data:', error);

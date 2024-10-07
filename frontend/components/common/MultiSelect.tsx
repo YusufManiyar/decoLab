@@ -47,22 +47,20 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({ options, onChange }) =
 
   return (
     <div ref={ref} className="relative">
-      <p className="text-black text-sm mb-1">Add relevant tags</p>
       <div 
         onClick={handleInputClick} 
-        className="p-2 rounded-md outline-none border border-primary text-sm cursor-pointer"
+        className="p-2 rounded-md outline-none border border-dashboard text-sm cursor-pointer font-poppins font-light text-gray-400"
       >
         {selectedOptions.length > 0 ? (
           <div className="flex flex-wrap gap-1">
             {selectedOptions.map((option) => (
-              <TagBadge key={option} name={option} onRemove={() => handleOptionToggle(option)} />
+              <TagBadge key={option} name={option} />
             ))}
           </div>
         ) : (
           'Select Tags'
         )}
       </div>
-      <p className="text-sm mt-2">What are tags?</p>
       {isOpen && (
         <div 
           className="absolute top-full left-0 border border-gray-300 bg-white z-10 w-full rounded-md shadow-lg"

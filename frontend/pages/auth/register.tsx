@@ -73,7 +73,7 @@ const Register: NextPage = () => {
     const handleSelectionChange = (selected: string[]) => {
         setSelectedTags(selected);
         console.log('Selected options:', selected);
-      };
+    };
 
     useEffect(() => {
         if(twitterHandle == '') {

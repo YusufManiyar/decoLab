@@ -13,15 +13,21 @@
     --foreground: #ededed;
   }
 }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
+  font-family: 'Poppins', sans-serif;
   background-color: white;
   color: black;
   font-family: Arial, Helvetica, sans-serif;
 }
 
 button {
-  transition: 0.4s;
+  transition: 0.2s;
   cursor: pointer !important;
 }
 
@@ -38,6 +44,14 @@ button {
   border: 1px solid rgb(239 68 68);
 }
 
+.border-dashboard {
+  border: 1px solid #D6D6D6;
+}
+
+.menu-hover {
+  color: black !important;
+}
+
 .welcome-text {
   font-family: Poppins;
   font-size: 52px;
@@ -48,12 +62,37 @@ button {
   color: #1E1E1E;
 }
 
-.background-vector {
-  position: relative;
-  width: 994px;
-  height: 1124.12px;
-  top: -100px;
-  left: -68px;
+.tag-border-defi {
+  border: 1px solid #D04FD2;
+  color: #D04FD2;
+}
+
+.tag-border-Marketing {
+  border: 1px solid #2296D7;
+  color: #2296D7;
+}
+
+.tag-border-DeFi {
+  border: 1px solid #CD2662;
+  color: #CD2662;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 @layer utilities {
