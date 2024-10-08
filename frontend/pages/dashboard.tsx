@@ -1,18 +1,14 @@
 import React, { ChangeEvent, useState } from "react";
 import { NextPage } from "next";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { MultiSelect, SearchBar, CompanyItemGroup, CompanyListGroup } from "@/components/common";
 import { PostGroup, PostItem } from "@/components/collaborationPost";
 import Logo from "../public/assets/Screenshot_2023-03-28_at_5.04 1.png";
-import {FaHome} from "react-icons/fa";
-import {MdMessage, MdNotifications} from "react-icons/md";
+import { Navbar } from "@/components/layouts";
 
 const styles = {
     container: "flex flex-col p-20",
-    menuContainer: "flex items-center gap-4 group", 
-    menuText: "font-poppins font-light text-xl text-gray-400 group-hover:text-black transition-colors duration-200",
-    menuIcon: "text-gray-400 w-6 h-6 group-hover:text-black transition-colors duration-200",
 };
 
 const tags = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
@@ -106,20 +102,7 @@ const Dashboard: NextPage = () => {
                 </div>
             </div>
             <div className="flex flex-row gap-10 mt-10 h-[100vh]">
-                <div className="basis-1/6 flex flex-col border-dashboard px-4 py-10 rounded-md">
-                    <Link href="/dashboard" className={styles.menuContainer}>
-                        <FaHome className={styles.menuIcon} />
-                        <span className={styles.menuText}>Home</span>
-                    </Link>
-                    <Link href="/chats" className={`${styles.menuContainer} mt-8`}>
-                        <MdMessage className={styles.menuIcon} />
-                        <span className={styles.menuText}>Chats</span>
-                    </Link>
-                    <Link href="/notification" className={`${styles.menuContainer} mt-8`}>
-                        <MdNotifications className={styles.menuIcon} />
-                        <span className={styles.menuText}>Notification</span>
-                    </Link>
-                </div>
+                <Navbar />
                 <div className="basis-2/3 flex flex-col gap-10 overflow-hidden overflow-y-auto">
                     <div className="flex flex-col border-dashboard rounded-md p-4 gap-4 sticky top-0 bg-white">
                         <textarea 

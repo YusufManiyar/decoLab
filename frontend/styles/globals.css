@@ -77,6 +77,10 @@ button {
   color: #CD2662;
 }
 
+.notification-transition {
+  transition: 0.3s;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
