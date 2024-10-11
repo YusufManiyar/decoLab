@@ -6,3 +6,5 @@ export {FundingGroup} from "./FundingGroup";
 export {SearchBar} from "./SearchBar";
 export {CompanyListGroup} from "./CompanyListGroup";
 export type {CompanyItemGroup} from "./CompanyListGroup";
+export {Spinner} from "./Spinner";
+export {AvatarUpload} from "./AvatarUpload";

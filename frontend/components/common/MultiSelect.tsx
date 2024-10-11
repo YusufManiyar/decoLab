@@ -4,9 +4,10 @@ import { TagBadge } from './TagBadge';
 interface MultiSelectProps {
   options: string[];
   onChange: (selected: string[]) => void;
+  isRemoved: boolean
 }
 
-export const MultiSelect: React.FC<MultiSelectProps> = ({ options, onChange }) => {
+export const MultiSelect: React.FC<MultiSelectProps> = ({ options, onChange, isRemoved }) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -18,11 +19,17 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({ options, onChange }) =
       const newSelected = prev.includes(option)
         ? prev.filter((o) => o !== option)
         : [...prev, option];
-
       onChange(newSelected);
       return newSelected;
     });
   };
+
+  useEffect(() => {
+    if(isRemoved) {
+      setSelectedOptions([]);
+      onChange([]);
+    }
+  }, [isRemoved]);
 
   const handleInputClick = () => {
     toggleDropdown();
@@ -49,12 +56,14 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({ options, onChange }) =
     <div ref={ref} className="relative">
       <div 
         onClick={handleInputClick} 
-        className="p-2 rounded-md outline-none border border-dashboard text-sm cursor-pointer font-poppins font-light text-gray-400"
+        className="p-2 rounded-md outline-none border border-primary text-sm cursor-pointer font-poppins font-light text-gray-400"
       >
         {selectedOptions.length > 0 ? (
           <div className="flex flex-wrap gap-1">
-            {selectedOptions.map((option) => (
-              <TagBadge key={option} name={option} />
+            {selectedOptions.map((option, index) => (
+              <span key={index}>
+                <TagBadge name={option} />
+              </span>
             ))}
           </div>
         ) : (
@@ -69,7 +78,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({ options, onChange }) =
             <div 
               key={option} 
               onClick={() => handleOptionClick(option)} 
-              className={`p-2 cursor-pointer ${selectedOptions.includes(option) ? 'bg-gray-300' : 'hover:bg-gray-200'}`}
+              className={`p-2 cursor-pointer font-poppins font-light transition-colors duration-300 text-sm mt-1 ${selectedOptions.includes(option) ? 'bg-green-500 text-white' : 'hover:bg-green-300'}`}
             >
               {option}
             </div>

@@ -1,13 +1,12 @@
 import React from "react";
 
 interface TagProps {
-    key: string;
     name: string;
 }
 
-export const TagBadge: React.FC<TagProps> = ({ key, name }) => {
+export const TagBadge: React.FC<TagProps> = ({ name }) => {
     return (
-        <span key={key} className="tagbadge flex justify-center flex-col cursor-pointer hover:bg-blue-500 hover:text-white items-center bg-blue-200 text-blue-800 text-xs rounded-md px-[10px] py-[3px]">
+        <span className={`tagbadge flex justify-center flex-col cursor-pointer text-xs rounded-md px-[10px] py-[3px] tag-border-${name.split("#")[1]}`}>
             {name}
         </span>
     );

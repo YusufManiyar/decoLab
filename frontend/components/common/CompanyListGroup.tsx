@@ -1,37 +1,30 @@
 import React from "react";
-import Image, {StaticImageData} from "next/image";
-
-export type CompanyItem = {
-    name: string;
-    avatar: StaticImageData | null;
-}
-
-export type CompanyItemGroup = {
-    groupName: string;
-    companies: CompanyItem[];
-}
+import type { CompaniesGroup } from "@/store/slices/companySlice";
+import Link from "next/link";
 
 interface CompanyListGroupProps {
-    items: CompanyItemGroup[];
+    items: CompaniesGroup[];
 }
 
 export const CompanyListGroup: React.FC<CompanyListGroupProps> = ({items}) => {
     return (
         <>
-            {items.map((item, index) => (
+            {items.length > 0 && items.map((item, index) => (
                 <div className="mt-10" key={index}>
-                    <span className={`px-5 py-2 tag-border-${item.groupName} rounded-md`}>#{item.groupName}</span>
+                    <span className={`px-5 py-2 tag-border-${item.group.split('#')[1]} rounded-md`}>{item.group}</span>
                     {item.companies.map((company, index) => (
-                        <div className="flex items-center mt-4 first:mt-8 cursor-pointer hover:bg-[#fff7f7] rounded-lg p-2" key={index}>
-                            {company.avatar ? 
-                                <span className="flex flex-col items-center justify-center w-12 h-12 bg-[#0A0B1A] rounded-full">
-                                    <Image src={company.avatar} alt={company.name} />
+                        <Link href={`/profile/${company._id}`} className="flex items-center mt-4 first:mt-8 cursor-pointer notification-transition hover:bg-[#b9b9b9] rounded-lg p-2" key={index}>
+                            {company.logo ? 
+                                <span 
+                                    className="flex flex-col items-center justify-center w-12 bg-no-repeat bg-center bg-cover h-12 rounded-full"
+                                    style={{backgroundImage: `url(${company.logo})`}}
+                                >
                                 </span>
                                 :
                                 <span className="flex flex-col items-center justify-center w-12 h-12 bg-[#D9D9D9] rounded-full"></span>
                             }
                             <span className="font-poppins font-light text-md ml-4">{company.name}</span>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             ))}

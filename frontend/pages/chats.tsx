@@ -2,6 +2,7 @@ import React, { ChangeEvent, useState } from "react";
 import { NextPage } from "next";
 import { Navbar } from "@/components/layouts";
 import { ChatItemType, ChatItemGroup, ChatInput, ChatContactItemType, ChatContactGroup } from "@/components/chatroom";
+import { Spinner } from "@/components/common";
 
 const chatItems: ChatItemType[] = [
     {
@@ -86,16 +87,25 @@ const chatContacts: ChatContactItemType[] = [
 
 const Chats: NextPage = () => {
     const [chatText, setChatText] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleChatInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setChatText(e.target.value);
     };
 
+    if (loading) {
+        return (
+            <div className="fixed inset-0 bg-white opacity-70 z-50 flex items-center justify-center">
+                <Spinner />
+            </div>
+        );
+    }
+
     return (
         <div className="flex flex-col p-20">
             <div className="flex flex-row gap-10">
                 <div className="basis-1/6">
-                    <h1 className="font-poppins font-medium text-4xl text-right">DeCollab</h1>
+                    <h1 className="font-poppins font-medium text-4xl text-right">CHATS</h1>
                 </div>
                 <div className="basis-2/3"></div>
                 <div className="basis-1/6"></div>

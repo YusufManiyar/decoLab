@@ -1,0 +1,1 @@
+export const Tags = ["#Blockchain", "#DeFi", "#NFT", "#Metaverse", "#AI"]

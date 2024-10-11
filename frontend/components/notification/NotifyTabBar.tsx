@@ -1,165 +1,157 @@
 import React, { useEffect, useState } from "react";
-import { NotifyItem, NotifyListGroup } from "./NotifyListGroup";
+import { NotificationType } from "@/types";
+import { NotifyListGroup } from "./NotifyListGroup";
+import { useDispatch } from "react-redux";
+import { setAllNotificationRead, setCollaborationRead, setUnreadAllCount, setUnreadCollaborationCount } from "@/store/slices/notificatonSlice";
+import { useWebSocketContext } from "@/context/WebSocketContext";
+import { allNotificationRead, collaborationNotificationRead } from "@/lib/api";
 
 interface NotifyTabBarProps {
-    items: NotifyItem[];
+    items: NotificationType[];
     isRead: boolean;
 }
 
 export const NotifyTabBar: React.FC<NotifyTabBarProps> = ({items, isRead}) => {
     
-    const [selectedTab, setSelectedTab] = useState<string>("all");
-    const [followingItems, setFollowing] = useState<NotifyItem[]>([]);
-    const [allItems, setAllItems] = useState<NotifyItem[]>([]);
-    const [archivedItems, setArchivedItems] = useState<NotifyItem[]>([]);
-    const [allUnreadCount, setAllUnreadCound] = useState<number>(0);
-    const [followUnreadCount, setFollowUnreadCound] = useState<number>(0);
+    const [selectedTab, setSelectedTab] = useState<string>("All");
+    const [collaborationItems, setCollaborationItems] = useState<NotificationType[]>([]);
+    const [allItems, setAllItems] = useState<NotificationType[]>([]);
+    const [allUnreadCount, setAllUnreadCount] = useState<number>(0);
+    const [collaborationUnreadCount, setCollaborationUnreadCount] = useState<number>(0);
+    const {sendMessage} = useWebSocketContext();
 
     const handleSelected = (key: string) => setSelectedTab(key);
 
+    const dispatch = useDispatch();
+
     const handleListClick = (key: number, type: string) => {
-        let updatedItems = allItems.map((item, index) => {
-            debugger;
-            if(index === key) {
-                if(type === "following") {
-                    item.isFollowUnread = false;
-                } else if (type === "normal") {
-                    item.isNormalUnread = false;
-                }
-            }
-            return item;
-        });
-        updatedItems.sort((a, b) => {
-            if (a.isFollowUnread && !b.isFollowUnread) {
-                return -1;
-            }
-            if (!a.isFollowUnread && b.isFollowUnread) {
-                return 1;
-            }
-            if (a.isNormalUnread && !b.isNormalUnread) {
-                return -1;
-            }
-            if (!a.isNormalUnread && b.isNormalUnread) {
-                return 1;
-            }
-            return 0;
-        });
-        setAllItems(updatedItems);
+        // let updatedItems = allItems.map((item, index) => {
+        //     if(index === key) {
+        //         if(type === "NewMessage") {
+        //             item.isCollaborated = false;
+        //         } else if (type === "normal") {
+        //             item.isNormalUnread = false;
+        //         }
+        //     }
+        //     return item;
+        // });
+        // updatedItems.sort((a, b) => {
+        //     if (a.isFollowUnread && !b.isFollowUnread) {
+        //         return -1;
+        //     }
+        //     if (!a.isFollowUnread && b.isFollowUnread) {
+        //         return 1;
+        //     }
+        //     if (a.isNormalUnread && !b.isNormalUnread) {
+        //         return -1;
+        //     }
+        //     if (!a.isNormalUnread && b.isNormalUnread) {
+        //         return 1;
+        //     }
+        //     return 0;
+        // });
+        // setAllItems(updatedItems);
     }
 
 
 
     useEffect(() => {
-        if(items.length > 0) {
-            let followingItems: NotifyItem[] = [];
-            let archivedItems: NotifyItem[] = [];
-            let allItems: NotifyItem[] = [];
-            let normalUnread: number = 0;
-            let followUnreadCount: number = 0;
-
-            for(const item of items) {
-                if(item.type === "following") {
-                    if(item.isFollowUnread) {
-                        followUnreadCount++;
+        console.log("notificationItems: ", items);
+        if(items && items.length > 0) {
+            let allItems: NotificationType[] = [];
+            let collaborationItems: NotificationType[] = [];
+            let allUnreadCount = 0;
+            let collaborationUnreadCount = 0;
+            console.log(items);
+            items.map(item => {
+                if(!item.notification.isRead) {
+                    allUnreadCount++;
+                    if(item.notification.type === "CollaborationRequest" && !item.notification.isRead) {
+                        collaborationUnreadCount++;
                     }
-                    followingItems.push(item);
                 }
-                if(item.type === "archived") {
-                    archivedItems.push(item);
+                if(item.notification.type === "CollaborationRequest") {
+                    collaborationItems.push(item);
                 }
-                if(item.isNormalUnread) {
-                    normalUnread++;
-                }
-            }
-            followingItems.sort((a, b) => {
-                if (a.isFollowUnread && !b.isFollowUnread) {
-                    return -1;
-                }
-                if (!a.isFollowUnread && b.isFollowUnread) {
-                    return 1;
-                }
-                return 0; 
-            });
-            
-            setFollowing(followingItems);
-
-            allItems = items.sort((a, b) => {
-                if (a.isFollowUnread && !b.isFollowUnread) {
-                    return -1;
-                }
-                if (!a.isFollowUnread && b.isFollowUnread) {
-                    return 1;
-                }
-                if (a.isNormalUnread && !b.isNormalUnread) {
-                    return -1;
-                }
-                if (!a.isNormalUnread && b.isNormalUnread) {
-                    return 1;
-                }
-                return 0;
+                allItems.push(item);
             });
 
             setAllItems(allItems);
-            setArchivedItems(archivedItems);
-            setFollowUnreadCound(followUnreadCount);
-            let allUnreadCount = followUnreadCount + normalUnread;
-            setAllUnreadCound(allUnreadCount);
+            setCollaborationItems(collaborationItems);
+            setAllUnreadCount(allUnreadCount);
+            setCollaborationUnreadCount(collaborationUnreadCount);
         }
     }, [items]);
 
     useEffect(() => {
-        if(selectedTab === "all") {
-            setAllUnreadCound(0);
+        if(selectedTab === "All") {
+            const allRead = async () => {
+                try {
+                    const response = await allNotificationRead();
+                    if(response.ok) {
+                        setAllUnreadCount(0);
+                        dispatch(setUnreadAllCount(0));
+                        dispatch(setAllNotificationRead());
+                    }
+                }catch(err) {
+                    console.log("Server error", err);
+                }
+            };
+            allRead();
         }
-        if(selectedTab === "following") {
-            setFollowUnreadCound(0);
+        if(selectedTab === "CollaborationRequest") {
+            const collaborationRead = async () => {
+                try {
+                    const response = await collaborationNotificationRead();
+                    if(response.ok) {
+                        setCollaborationUnreadCount(0);
+                        dispatch(setUnreadCollaborationCount(0));
+                        dispatch(setCollaborationRead());
+                    }
+                } catch(err) {
+                    console.log("Server error:", err);
+                }
+            };
+            collaborationRead();
         }
+
     }, [selectedTab]);
 
     useEffect(() => {
         if(isRead) {
-            setAllUnreadCound(0);
-            setFollowUnreadCound(0);
+            setAllUnreadCount(0);
+            setCollaborationUnreadCount(0);
             let updatedAllItems = allItems.map((item) => {
-                item.isFollowUnread = false;
-                item.isNormalUnread = false;
+                item.notification.isRead = true;
                 return item;
             });
+            dispatch(setUnreadAllCount(0));
             setAllItems(updatedAllItems);
         }
     }, [isRead]);
 
     return (
-        <div className="border-dashboard rounded-md text-sm basis-5/6 font-medium text-center text-gray-500 border-b border-gray-200 ">
-            <ul className="flex flex-wrap -mb-px">
-                <li className="mr-1 flex items-center">
+        <div className="border-dashboard rounded-md p-2 text-sm basis-5/6 font-medium text-center text-gray-500 border-b border-gray-200 overflow-auto">
+            <ul className="flex flex-rows sticky top-0">
+                <li className="mr-1 flex items-center basis-1/3 justify-center">
                     <button
-                        className={`inline-block w-60 p-4 border-b-2 rounded-t-lg hover:text-green-600 ${selectedTab === "all" && "border-green-600 text-green-600"}
+                        className={`w-full flex justify-center items-center py-5 border-b-2 rounded-t-lg hover:text-green-600 ${selectedTab === "All" && "border-green-600 text-green-600"}
                             focus:border-green-600 focus:text-green-600 hover:border-green-600 text-lg font-poppins`}
-                        onClick={() => handleSelected('all')}
+                        onClick={() => handleSelected('All')}
                     >
-                        All {allUnreadCount !== 0 && <span className="px-2 py-1 ml-2 bg-red-500 text-white font-poppins font-light text-sm" style={{borderRadius: "50%"}}>{allUnreadCount}</span>}
+                        All {allUnreadCount !== 0 && <span className="w-8 h-8 flex items-center justify-center ml-3 bg-red-500 text-white font-poppins font-light text-sm" style={{borderRadius: "50%"}}>{allUnreadCount}</span>}
                     </button>
                 </li>
-                <li className="mr-1">
-                    <button className={`inline-block w-60 p-4 border-b-2 border-transparent rounded-t-lg hover:text-green-600
+                <li className="mr-1 basis-1/3 flex items-center justify-center">
+                    <button className={`flex justify-center items-center w-full py-5 border-b-2 border-transparent rounded-t-lg hover:text-green-600
                             hover:border-green-600 focus:border-green-600 focus:text-green-600 text-lg font-poppins`}
-                        onClick={() => handleSelected('following')}
+                        onClick={() => handleSelected('CollaborationRequest')}
                     >
-                        Following {followUnreadCount !== 0 && <span className="px-2 py-1 ml-2 bg-red-500 text-white font-poppins font-light text-sm" style={{borderRadius: "50%"}}>{followUnreadCount}</span>}
-                    </button>
-                </li>
-                <li className="mr-1">
-                    <button
-                        className={`inline-block w-60 p-4 border-b-2 border-transparent rounded-t-lg hover:text-green-600
-                            focus:border-green-600 focus:text-green-600 hover:border-green-600 text-lg font-poppins`}
-                        onClick={() => handleSelected('archived')}
-                    >
-                        Archived
+                        Collaboration {collaborationUnreadCount !== 0 && <span className="w-8 h-8 flex items-center justify-center ml-2 bg-red-500 text-white font-poppins font-light text-sm" style={{borderRadius: "50%"}}>{collaborationUnreadCount}</span>}
                     </button>
                 </li>
             </ul>
-            <NotifyListGroup items={selectedTab === "all" ? allItems : selectedTab === "following" ? followingItems : archivedItems} handleClick={handleListClick} />
+            <NotifyListGroup items={selectedTab === "All" ? allItems : selectedTab === "CollaborationRequest" ? collaborationItems : []} handleClick={handleListClick} />
         </div>
     );
 }

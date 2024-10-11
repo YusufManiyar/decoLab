@@ -20,8 +20,8 @@ export const InputGroup: React.FC<InputGroupItems> = ({items}) => {
        <>
             { 
                 items.map((item, index) => (
-                    <div key={index} className="flex flex-col mt-2">
-                        <label className="text-black text-sm mb-1">{item.label}</label>
+                    <div key={index} className="flex flex-col mt-2 w-full">
+                        <label className="text-black text-sm mb-1 font-poppins font-light">{item.label}</label>
                         <input 
                             type={item.type} 
                             name={item.name} 

@@ -62,12 +62,12 @@ button {
   color: #1E1E1E;
 }
 
-.tag-border-defi {
+.tag-border-Blockchain {
   border: 1px solid #D04FD2;
   color: #D04FD2;
 }
 
-.tag-border-Marketing {
+.tag-border-AI {
   border: 1px solid #2296D7;
   color: #2296D7;
 }
@@ -75,6 +75,15 @@ button {
 .tag-border-DeFi {
   border: 1px solid #CD2662;
   color: #CD2662;
+}
+
+.tag-border-NFT {
+  border: 1px solid #22bd3c;
+  color: #22bd3c;
+}
+.tag-border-Metaverse {
+  border: 1px solid #a8840f;
+  color: #a8840f;
 }
 
 .notification-transition {

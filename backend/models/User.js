@@ -9,12 +9,13 @@ const userSchema = new mongoose.Schema({
         industry: [{type: String}],
         location: {type: String, default: ''},
         socialLinks: {
-            twitterHandle: {type: String, required: true},
+            twitterHandle: {type: String, unique: true, sparse: true, default: ''},
             telegram: {type: String, default: ''},
             github: {type: String, default: ''}
         },
         teamMembers: [{
             name: {type: String, default: ''},
+            avatar: {type: String, default: ''},
             role: {type: String, default: ''},
             contactEmail: {type: String, default: ''},
             linkedin: {type: String, default: ''}
