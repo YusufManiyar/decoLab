@@ -185,11 +185,11 @@ const Register: NextPage = () => {
                         industry: selectedTags
                     }
                 }
-                debugger;
                 const response = await register(user);
                 if(response.ok) {
                     toast.success(response.message);
                     dispatch(setUser({
+                        _id: "",
                         name: user.name,
                         email: user.email,
                         profile: {

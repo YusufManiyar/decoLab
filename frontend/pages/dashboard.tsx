@@ -30,7 +30,7 @@ const Dashboard: NextPage = () => {
     const [newTimeFrame, setNewTimeFrame] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [newContent, setNewContent] = useState('');
-    const [newTimeUnit, setNewTimeUnit] = useState('min');
+    const [newTimeUnit, setNewTimeUnit] = useState('day');
     const [disabled, setDisabled] = useState<boolean>(false);
     const [sposts, setSposts] = useState<PostItem[]>([]);
     const [isRemovedTags, setIsRemovedTags] = useState<boolean>(false);
@@ -211,7 +211,6 @@ const Dashboard: NextPage = () => {
                                             id=""
                                             onChange={handleTimeUnitChange}
                                         >
-                                            <option value="min">Min</option>
                                             <option value="day">Day</option>
                                             <option value="week">Week</option>
                                             <option value="month">Month</option>

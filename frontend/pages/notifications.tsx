@@ -7,20 +7,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { fetchAllNotifications } from "@/lib/api";
 import { addUnreadAllNotificationCount, addUnreadCollaborationNotificationCount, setNotifications } from "@/store/slices/notificatonSlice";
+import { NotificationType } from "@/types";
 
 const Notifications: NextPage = () => {
     const [isRead, setIsRead] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
-
+    const [sNotifications, setSNotifications] = useState<NotificationType[]>([]);
     const dispatch = useDispatch();
     const notifications = useSelector((state: RootState) => state.notification.notifications);
+    const {userData} = useSelector((state: RootState) => state.user);
 
     const getAllNotifications = useCallback(async () => {
         try {
-            const response = await fetchAllNotifications();
-            console.log('notificationResponse:', response);
+            const response = await fetchAllNotifications(userData?._id as string);
             if (response.ok) {
-                console.log('ok');
                 dispatch(setNotifications(response.notifications));
             } else {
                 console.error("Failed to fetch notifications:", response);
@@ -42,7 +42,12 @@ const Notifications: NextPage = () => {
                 }
             }
         });
-    }, [getAllNotifications]);
+    }, []);
+
+    useEffect(() => {
+        const snotifications = notifications.slice().reverse();
+        setSNotifications(snotifications);
+    }, [notifications]);
 
     const handleIsRead = () => {
         setIsRead(true);
@@ -66,7 +71,7 @@ const Notifications: NextPage = () => {
             </div>
             <div className="flex flex-row gap-10 mt-10">
                 <Navbar />
-                <NotifyTabBar items={notifications} isRead={isRead} />
+                <NotifyTabBar items={sNotifications} isRead={isRead} />
             </div>
         </div>
     );

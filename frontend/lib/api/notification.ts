@@ -1,7 +1,7 @@
 import axiosInstance from "../axiosInstance";
 
-export const fetchAllNotifications = async () => {
-    const response = await axiosInstance.get('/notification/all');
+export const fetchAllNotifications = async (id: string) => {
+    const response = await axiosInstance.get(`/notification/all/${id}`);
     return response.data;
 }
 

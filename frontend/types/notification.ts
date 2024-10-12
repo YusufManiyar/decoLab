@@ -9,6 +9,10 @@ export type NotificationType = {
         message: string;
         isRead: boolean;
         createdAt: Date;
+        collaborationId: string;
+        status: string;
+        isReturened: boolean;
+        isAnswered: boolean;
     }
     sender: User
 }

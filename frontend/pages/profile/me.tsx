@@ -25,6 +25,7 @@ import { toast } from "react-toastify";
 import { SocialForm, TeamMemberForm } from "@/components/profileEditForms";
 import { clearFileUrl } from "@/store/slices/tempSlice";
 import { Tags } from "@/constant";
+import { calFollowersWithUnit } from "@/utils/cal";
 
 const styles = {
     container: "flex flex-col w-full p-20",
@@ -389,7 +390,7 @@ const Profile: NextPage = () => {
                                 <h1 className={`${styles.name} font-bold text-2xl mr-2`}>{userData?.name}</h1>
                             </div>
                             <div className="flex flex-col justify-center items-center mt-2">
-                                <span className="text-xs text-gray-700 font-poppins">10.2k followers</span>
+                                <span className="text-xs text-gray-700 font-poppins">{userData?.profile.followers && calFollowersWithUnit(userData?.profile.followers.length)} followers</span>
                             </div>
                         </div>
                         <div className={styles.teamContainer}>
@@ -530,7 +531,7 @@ const Profile: NextPage = () => {
                         : modalChildren === "social" ? 
                             <SocialForm items={socialInputs.map(item => ({...item, handleChange: handleSocialChange}))} />
                         : modalChildren === "tags" ?
-                            <MultiSelect options={Tags} onChange={handleTagChange} />
+                            <MultiSelect options={Tags} onChange={handleTagChange} isRemoved={false} />
                         : <></>
                     }
                 </>

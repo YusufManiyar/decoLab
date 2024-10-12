@@ -19,6 +19,9 @@ import { fetchUserById } from "@/lib/api";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setOtherUser } from "@/store/slices/tempSlice";
+import { calFollowersWithUnit } from "@/utils/cal";
+import { useWebSocket } from "@/hooks/useWebSocket";
+import { toast } from "react-toastify";
 
 const styles = {
     container: "flex flex-col w-full p-20",
@@ -59,18 +62,24 @@ const Profile: NextPage = () => {
     const router = useRouter();
     const {userId} = router.query;
     const [loading, setLoading] = useState(true);
+    const [followerDisabled, setFollowerDisabled] = useState<boolean>(false);
 
     const dispatch = useDispatch();
     const otherUser = useSelector((state: RootState) => state.temp.otherUser);
+    const {userData} = useSelector((state: RootState) => state.user);
+
+    const {sendMessage} = useWebSocket();
     
     const fetchUserProfile = useCallback(async () => {
         if(!userId) return;
         setLoading(true);
         try {
-            debugger;
             const response = await fetchUserById(userId as string);
             if(response.ok) {
                 dispatch(setOtherUser(response.user));
+                if(response.user.profile.followers.some((fo: string, index: number) => fo === userData?._id)) {
+                    setFollowerDisabled(true);
+                }
             }
         }catch(err) {  
             console.error("Server error", err);
@@ -79,9 +88,26 @@ const Profile: NextPage = () => {
         }
     }, [userId]);
 
+    const handleFollowClick = () => {
+        try {
+            sendMessage({type: "request-followers", data: {otherId: otherUser?._id, myName: userData?.name}});
+            toast.success("Follower request is sent successfully");
+        }catch (err) {
+            console.log("Server error:", err);
+        }
+    }
+
     useEffect(() => {
         fetchUserProfile();
     }, [fetchUserProfile]);
+
+    useEffect(() => {
+        if(otherUser?.profile.followers) {
+            if(otherUser.profile.followers.some((fo: string, index: number) => fo === userData?._id)) {
+                setFollowerDisabled(true);
+            }
+        }
+    }, [otherUser]);
 
     if (loading) {
         return (
@@ -112,14 +138,13 @@ const Profile: NextPage = () => {
                             >
                         </div>
                         <div className={styles.directInfo}>
-                            <div className="flex justify-between">
+                            <div className="flex justify-between items-center">
                                 <h1 className={`${styles.name} font-bold text-2xl mr-2`}>{otherUser?.name}</h1>
-                                <div className="flex flex-col items-center justify-center">
-                                    <TagBadge name="Follow +" />
-                                </div>
+                                {!followerDisabled ? <button className="px-2 py-1 rounded-md bg-[#1E1E1E] text-xs cursor-pointer text-white hover:bg-black" onClick={handleFollowClick}>Follow +</button>
+                                    : <span className="font-poppins font-light text-xs text-gray-700">Followed</span>}
                             </div>
                             <div className="flex flex-col justify-center items-center mt-2">
-                                <span className="text-xs text-gray-700 font-poppins">10.2k followers</span>
+                                <span className="text-xs text-gray-700 font-poppins">{otherUser?.profile.followers && calFollowersWithUnit(otherUser?.profile.followers.length)} followers</span>
                             </div>
                         </div>
                         <div className={styles.teamContainer}>

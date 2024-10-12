@@ -17,8 +17,10 @@ export interface User {
     additionalInfo: {
         logo: string;
         bio: string;
-    }
-  }
+    },
+    collaboratedCompanies: CollaboratedCompanies[] | [],
+    followers: string[] | [],
+  },
 }
 
 export interface TeamMember {
@@ -27,6 +29,10 @@ export interface TeamMember {
     role: string;
     contactEmail: string;
     linkedin: string;
+}
+
+type CollaboratedCompanies = {
+  _id: string;
 }
 
 interface UserState {

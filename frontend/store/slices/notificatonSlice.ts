@@ -63,9 +63,33 @@ const notificationSlice = createSlice({
         },
         addUnreadCollaborationNotificationCount(state) {
             state.unreadCollaborationCount++;
+        },
+        updateNotificationByCollaborationAccepted(state, action: PayloadAction<string>) {
+            const index = state.notifications.findIndex(notify => notify.notification._id === action.payload);
+            if(index !== -1) {
+                state.notifications[index].notification.status = "Accepted";
+            }
+        },
+        updateNotificationByCollaborationDeclined(state, action: PayloadAction<string>) {
+            const index = state.notifications.findIndex(notify => notify.notification._id === action.payload);
+            if(index !== -1) {
+                state.notifications[index].notification.status = "Declined";
+            }
         }
     }
 });
 
-export const {setNotifications, clearNotifications, setAllNotificationRead, setCollaborationRead, pushNotification, setUnreadAllCount, setUnreadCollaborationCount, addUnreadAllNotificationCount, addUnreadCollaborationNotificationCount} = notificationSlice.actions;
+export const {
+    setNotifications, 
+    clearNotifications, 
+    setAllNotificationRead, 
+    setCollaborationRead, 
+    pushNotification, 
+    setUnreadAllCount, 
+    setUnreadCollaborationCount, 
+    addUnreadAllNotificationCount, 
+    addUnreadCollaborationNotificationCount,
+    updateNotificationByCollaborationAccepted,
+    updateNotificationByCollaborationDeclined,
+} = notificationSlice.actions;
 export default notificationSlice.reducer;

@@ -16,6 +16,35 @@ const addNewPending = async (data) => {
     }
 }
 
+const acceptCollaboration = async (id) => {
+    try {
+        const updatedCollaboration = await Collaboration.findByIdAndUpdate(
+            id, 
+            { status: 'Accepted' }, 
+            { new: true, runValidators: true }
+        );
+        return updatedCollaboration;
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+const denyCollaboration = async (id) => {
+    try {
+        const updatedCollaboration = await Collaboration.findByIdAndUpdate(
+            id, 
+            { status: 'Declined' }, 
+            { new: true, runValidators: true }
+        );
+        return updatedCollaboration;
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+
 module.exports = {
     addNewPending,
+    acceptCollaboration,
+    denyCollaboration
 }

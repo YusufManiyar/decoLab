@@ -22,8 +22,10 @@ const userSchema = new mongoose.Schema({
         }],
         additionalInfo: {
             logo: {type: String, default: ''},
-            bio: {type: String, default: ''}
-        }
+            bio: {type: String, default: ''},
+        },
+        collaboratedCompanies: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+        followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     }
 });
 

@@ -2,11 +2,12 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { pushPost, updatePostToCollaboration } from '@/store/slices/postSlice';
 import { RootState } from '@/store/store';
-import { addUnreadAllNotificationCount, addUnreadCollaborationNotificationCount, pushNotification } from '@/store/slices/notificatonSlice';
+import { addUnreadAllNotificationCount, addUnreadCollaborationNotificationCount, pushNotification, updateNotificationByCollaborationAccepted, updateNotificationByCollaborationDeclined } from '@/store/slices/notificatonSlice';
+import { setUser } from '@/store/slices/userSlice';
+import { setOtherUser } from '@/store/slices/tempSlice';
 
 export const useWebSocket = () => {
     const dispatch = useDispatch();
-    const userData = useSelector((state: RootState) => state.user.userData);
     const socketRef = useRef<WebSocket | null>(null);
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -22,10 +23,25 @@ export const useWebSocket = () => {
                     case "collaborate-pending":
                         dispatch(updatePostToCollaboration(data.postId));
                         break;
-                    case "receive-collaboration-request":
+                    case "receive-notification":
                         dispatch(pushNotification(data));
                         dispatch(addUnreadAllNotificationCount());
                         dispatch(addUnreadCollaborationNotificationCount());
+                        break;
+                    case "collaboration-accept":
+                        dispatch(updateNotificationByCollaborationAccepted(data.updatedNotificationId));
+                        break;
+                    case "collaboration-declined":
+                        dispatch(updateNotificationByCollaborationDeclined(data.updatedNotificationId));
+                        break;
+                    case "get-followers-request":
+                        dispatch(pushNotification(data.notification));
+                        dispatch(addUnreadAllNotificationCount());
+                        dispatch(addUnreadCollaborationNotificationCount());
+                        dispatch(setUser(data.updatedUser));
+                        break;
+                    case "request-followers":
+                        dispatch(setOtherUser(data));
                         break;
                     default:
                         return;

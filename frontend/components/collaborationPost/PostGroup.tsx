@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import {MdShare} from "react-icons/md";
 import { TagBadge } from "../common";
-import { covertDateFromDBToRegularString } from "@/utils";
+import { covertDateFromDBToRegularString, isIntendExpiredPost } from "@/utils";
 import { CollaborationPendingType } from "@/types";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
@@ -54,7 +54,7 @@ export const PostGroup: React.FC<PostGroupProps> = ({items}) => {
     return (
         <div className="flex flex-col gap-10">
             {items && items.map((item, index) => (
-                <div className="flex flex-col border-dashboard rounded-md p-4" key={index}>
+                <div className={`flex flex-col border-dashboard rounded-md p-4 ${isIntendExpiredPost(item.createdAt, item.timeFrame, item.timeUnit) ? 'bg-gray-300' : ''}`} key={index}>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center justify-between">
                             <span 
@@ -82,7 +82,7 @@ export const PostGroup: React.FC<PostGroupProps> = ({items}) => {
                             ))}
                         </div>
                         <div className="flex">
-                            {covertDateFromDBToRegularString(item.createdAt)}
+                            <span className="font-poppins font-light text-sm">{covertDateFromDBToRegularString(item.createdAt)}</span>
                         </div>
                     </div>
                     <div className="flex items-center justify-between mt-4">
@@ -99,7 +99,6 @@ export const PostGroup: React.FC<PostGroupProps> = ({items}) => {
                         >
                             {item.isClosed ? "Successfully Closed by PrimeXBT" : item.isRequested ? "Sent collaboration request" : "Send Collaboration Request"}
                         </button>
-
                     }
                 </div>
             ))}

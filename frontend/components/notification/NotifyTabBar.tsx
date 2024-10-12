@@ -18,7 +18,6 @@ export const NotifyTabBar: React.FC<NotifyTabBarProps> = ({items, isRead}) => {
     const [allItems, setAllItems] = useState<NotificationType[]>([]);
     const [allUnreadCount, setAllUnreadCount] = useState<number>(0);
     const [collaborationUnreadCount, setCollaborationUnreadCount] = useState<number>(0);
-    const {sendMessage} = useWebSocketContext();
 
     const handleSelected = (key: string) => setSelectedTab(key);
 
@@ -120,13 +119,8 @@ export const NotifyTabBar: React.FC<NotifyTabBarProps> = ({items, isRead}) => {
     useEffect(() => {
         if(isRead) {
             setAllUnreadCount(0);
-            setCollaborationUnreadCount(0);
-            let updatedAllItems = allItems.map((item) => {
-                item.notification.isRead = true;
-                return item;
-            });
             dispatch(setUnreadAllCount(0));
-            setAllItems(updatedAllItems);
+            dispatch(setAllNotificationRead());
         }
     }, [isRead]);
 

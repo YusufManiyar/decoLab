@@ -1,8 +1,9 @@
 const Notification = require('../models/Notification');
 
-const getAllNotification = async (req, res) => {
+const getAllNotificationById = async (req, res) => {
     try {
-        const notifications = await Notification.find().populate('senderId');
+        const {id} = req.params;
+        const notifications = await Notification.find({receiverId: id}).populate('senderId');
         const transformedNotifications = notifications.map(notification => ({
             notification,
             sender: notification.senderId
@@ -35,7 +36,7 @@ const collaborationRead = async (req, res) => {
 }
 
 module.exports = {
-    getAllNotification,
+    getAllNotificationById,
     allNotificationRead,
     collaborationRead,
 }
