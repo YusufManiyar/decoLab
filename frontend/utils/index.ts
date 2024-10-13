@@ -1,2 +1,2 @@
-export {covertDateFromDBToRegularString} from "./dateConvert";
+export {covertDateFromDBToRegularString, convertTimeFromDB} from "./dateConvert";
 export {isIntendExpiredPost} from "./cal";

@@ -8,6 +8,7 @@ const projectRoutes = require('./routes/projectRoutes');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 const path = require('path');
 const setupWebSocketServer = require('./sockets');
 require('dotenv').config();
@@ -33,6 +34,7 @@ app.use('/api/projects', passport.authenticate('jwt', { session: false }), proje
 app.use('/api/user', passport.authenticate('jwt', { session: false }), userRoutes);
 app.use('/api/post', passport.authenticate('jwt', { session: false }), postRoutes);
 app.use('/api/notification', passport.authenticate('jwt', { session: false }), notificationRoutes);
+app.use('/api/chat', passport.authenticate('jwt', {session: false}), chatRoutes);
 
 // Start server
 const server = app.listen(PORT, () => {

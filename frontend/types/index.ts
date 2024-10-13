@@ -2,6 +2,7 @@ import { StaticImageData } from "next/image";
 export type {NewPostType} from "./post";
 export type {CollaborationPendingType} from "./collaboration";
 export type {NotificationType} from "./notification";
+export type {Chat} from "./chat";
 
 export type Avatar = {
     src: StaticImageData,

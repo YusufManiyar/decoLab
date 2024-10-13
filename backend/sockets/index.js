@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const {addNewPost} = require('./postSocket');
 const {addNewPending, acceptCollaboration, denyCollaboration} = require('./collaborationSocket');
 const {addNewNotification, acceptNotification, denyNotification} = require('./notificationSocket');
-const {requestFollower, getMe} = require('./userSocket');
+const {requestFollower} = require('./userSocket');
+const {addChat} = require('./chatSocket');
 
 const setupWebSocketServer = () => {
     const wss = new WebSocket.Server({ port: 5001 });
@@ -104,6 +105,10 @@ const setupWebSocketServer = () => {
                         broadCastToMe(ws, "request-followers", updatedOtherUserByRequestFollower);
                     }
                     break;
+                case 'send-chat':
+                    const newChatModel = {
+                        
+                    }
                 default:
                     return;
             }

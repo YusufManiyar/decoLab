@@ -52,8 +52,6 @@ export const NotifyTabBar: React.FC<NotifyTabBarProps> = ({items, isRead}) => {
         // setAllItems(updatedItems);
     }
 
-
-
     useEffect(() => {
         console.log("notificationItems: ", items);
         if(items && items.length > 0) {

@@ -57,6 +57,7 @@ export const useWebSocket = () => {
             if (socketRef.current) {
                 socketRef.current.close();
                 socketRef.current = null;
+                location.reload();
             }
         };
     }, []);

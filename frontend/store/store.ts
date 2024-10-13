@@ -4,6 +4,7 @@ import tempReducer from "./slices/tempSlice";
 import companyReducer from "./slices/companySlice";
 import postReducer from "./slices/postSlice";
 import notificationReducer from "./slices/notificatonSlice";
+import chatReducer from "./slices/chatSlice";
 
 const store = configureStore({
     reducer: {
@@ -11,7 +12,8 @@ const store = configureStore({
         temp: tempReducer,
         company: companyReducer,
         post: postReducer,
-        notification: notificationReducer
+        notification: notificationReducer,
+        chat: chatReducer,
     },
 });
 

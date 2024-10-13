@@ -10,10 +10,11 @@ const styles = {
 interface ChatInputProps {
     value: string;
     file: string | null;
-    handleChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;   
+    handleChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+    handleSend: () => void;
 }
 
-export const ChatInput: React.FC<ChatInputProps> = ({value, file, handleChange}) => {
+export const ChatInput: React.FC<ChatInputProps> = ({value, file, handleChange, handleSend}) => {
     
     return (
         <div className={styles.container}>
@@ -31,7 +32,10 @@ export const ChatInput: React.FC<ChatInputProps> = ({value, file, handleChange})
                 onChange={handleChange}
             />
             <div className="flex">
-                <button className="w-9 h-9 rounded-full flex items-center justify-center bg-green-600 cursor-pointer hover:bg-green-700 notification-transition">
+                <button 
+                    className="w-9 h-9 rounded-full flex items-center justify-center bg-green-600 cursor-pointer hover:bg-green-700 notification-transition"
+                    onClick={handleSend}
+                >
                     <MdSend className="w-5 h-5 text-white" />
                 </button>
             </div>

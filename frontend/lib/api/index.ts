@@ -3,3 +3,4 @@ export {fetchUserById, fetchCompanyList, fetchMe, updateMe, addTeamMember} from 
 export {deleteTeamAvatar} from "./fileUpload";
 export {addNewPost, getAllPosts} from "./post";
 export {fetchAllNotifications, allNotificationRead, collaborationNotificationRead} from "./notification";
+export {fetchAllChats} from "./chat";

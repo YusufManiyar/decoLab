@@ -1,18 +1,9 @@
 import React from "react";
-import Image, { StaticImageData } from "next/image";
-
-export type ChatItemType = {
-    sender: {
-        name: string;
-        avatar: StaticImageData | null;
-    },
-    text: string;
-    time: string;
-    file: string;
-}
+import { Chat } from "@/types";
+import { convertTimeFromDB } from "@/utils";
 
 interface ChatItemGroupProps {
-    items: ChatItemType[];
+    items: Chat[];
 }
 
 const styles = {
@@ -27,14 +18,16 @@ export const ChatItemGroup: React.FC<ChatItemGroupProps> = ({items}) => {
          {items.map((item, index) => (
             <div className={styles.container} key={index}>
                 <div className={styles.header}>
-                    <span className={styles.avatar}>
-                        {item.sender.avatar && <Image src={item.sender.avatar} alt={item.sender.name} />}
+                    <span 
+                        className={styles.avatar}
+                        style={{backgroundImage: `url(${item.sender && item.sender.profile.additionalInfo.logo})`}}
+                    >
                     </span>
                     <h1 className="font-poppins font-light text-sm ml-5">{item.sender.name}</h1>
-                    <span className="font-poppins font-extralight text-xs ml-2">{item.time}</span>
+                    <span className="font-poppins font-extralight text-xs ml-2">{convertTimeFromDB(item.createdAt.toISOString())}</span>
                 </div>
                 <div className="flex flex-col ml-12">
-                    <div className="p-4"><span className="font-poppins font-extralight text-sm">{item.text}</span></div>
+                    <div className="p-4"><span className="font-poppins font-extralight text-sm">{item.message}</span></div>
                     <div></div>
                 </div>
             </div>
